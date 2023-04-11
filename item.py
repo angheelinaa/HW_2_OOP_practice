@@ -94,5 +94,6 @@ class Item:
         except FileNotFoundError:
             print(f'файла "{json_path}" нет')
 
-    def item_save_as_json(self):
-        return json.dumps(self, cls=ItemHubEncoder, ensure_ascii=False, indent=4)
+    def save_as_json(self, filename):
+        with open(filename, 'w', encoding='UTF-8') as f:
+            f.write(json.dumps(self, cls=ItemHubEncoder, ensure_ascii=False, indent=4))

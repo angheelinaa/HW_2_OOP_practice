@@ -100,16 +100,16 @@ class Hub:
         ins = Item(name=d['_name'], description=d['_description'], dispatch_time=d['_dispatch_time'])
         ins._tags = d['_tags']
         ins.cost = d['_cost']
-        Hub().add_item(ins)
+        return ins
 
-    def read_from_json(json_path):
+    def read_from_json(self, json_path):
         try:
             with open(json_path, 'r', encoding='UTF-8') as f:
                 result = f.read()
-            json.loads(result, object_hook=lambda d: dict_to_hub(d))
-            return Hub()
+            json.loads(result, object_hook=lambda d: self._items.append(dict_to_hub(d)))
         except FileNotFoundError:
             print(f'файла "{json_path}" нет')
 
-    def hub_save_as_json(self):
-        return json.dumps(self._items, cls=ItemHubEncoder, ensure_ascii=False, indent=4)
+    def save_as_json(self, filename):
+        with open(filename, 'w', encoding='UTF-8') as f:
+            f.write(json.dumps(self._items, cls=ItemHubEncoder, ensure_ascii=False, indent=4))
